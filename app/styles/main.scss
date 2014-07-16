@@ -1,0 +1,244 @@
+$icon-font-path: "/bower_components/sass-bootstrap/fonts/";
+$body-bg: #ffd430;
+$text-color: #000;
+@import 'sass-bootstrap/lib/bootstrap';
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+/* Space out content a bit */
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-family: 'Helvetica Neue';
+}
+
+
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Custom page header */
+.header {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+    padding-bottom: 19px;
+}
+
+/* Custom page footer */
+.footer {
+    padding-top: 19px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+}
+
+.container-narrow > hr {
+    margin: 30px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+/* Supporting marketing content */
+.marketing {
+    margin: 40px 0;
+}
+
+.marketing p + h4 {
+    margin-top: 28px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    .container {
+        max-width: 730px;
+    }
+
+    /* Remove the padding we set earlier */
+    .header,
+    .marketing,
+    .footer {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    /* Space out the masthead */
+    .header {
+        margin-bottom: 30px;
+    }
+    /* Remove the bottom border on the jumbotron for visual effect */
+    .jumbotron {
+        border-bottom: 0;
+    }
+}
+
+.page{
+    display: none;
+    &.active{
+        display:block;
+    }
+}
+
+
+.page.loading{
+    text-align: center;
+    p{
+        margin-top:5%;
+        font-size:130%;
+        text-transform: uppercase;
+        font-family: 'Helvetica Neue', Helvetica, Arial;
+        font-weight: lighter;
+
+    }
+    span.loading{
+        animation: loading 2s 0s infinite ease-in-out;
+        opacity:1;
+        margin-top:25%;
+        font-size:2000%;
+
+        @media (max-width:$screen-sm-max){
+            font-size:500%;
+        }
+    }
+}
+
+@keyframes loading {
+  0% {
+    // font-size:105%;
+    // margin-left:-2.5%;
+    transform: rotate(0deg);
+  }
+
+  50% {
+    // font-size:100%;
+    transform: rotate(180deg);
+  }
+
+  100%{
+    transform: rotate(360deg);
+
+  }
+}
+
+@keyframes pulsate {
+  0% {
+    // color:blue;
+    opacity:0.75
+  }
+
+  25% {
+    // color:orange;
+    opacity:.95
+  }
+
+  50% {
+    // color:red;
+    opacity: 1;
+  }
+
+  75% {
+    // color:green;
+    opacity:0.95
+  }
+
+
+  100% {
+    // color:blue;
+    opacity:0.75;
+  }
+}
+
+p.result{
+    margin:0;
+    padding:5px;
+    width:100%;
+    background:#ccc;
+
+}
+
+.page.playlist{
+    .logo{
+        text-align:center;
+        margin-bottom:50px;
+        h1, h2{
+            font-weight: lighter;
+            // padding:0 20px;
+            // border-bottom:1px solid #000;
+        }
+        h2{
+            font-size:20px;
+        }
+    }
+    ul li{
+        // background:$text-color;
+        // color:$body-bg;
+        text-transform: uppercase;
+        border:none;
+        border-bottom:2px solid $body-bg;
+        // background:rgba(0,0,0,0.1);
+        a{
+            float:right;
+            display:block;
+            font-size:120%;
+            margin:0 0 0 10px;
+        }
+    }
+    
+    ::-webkit-input-placeholder {
+       font-weight: lighter;
+       color: black;
+    }
+
+    :-moz-placeholder { /* Firefox 18- */
+       font-weight: lighter;
+       color: black;  
+    }
+
+    ::-moz-placeholder {  /* Firefox 19+ */
+       color: black;
+       font-weight: lighter;  
+    }
+
+    :-ms-input-placeholder {  
+       color: black;  
+       font-weight: lighter;
+    }
+    
+    .twitter-typeahead{
+        width:100%;
+    }
+    .search{
+        width:100%;
+        border:none;
+        outline:none !important;
+        border-bottom:2px solid #000;
+        background:transparent;
+        height:50px;
+        text-transform: uppercase;
+        font-size: 150%;
+        font-weight: light;
+    }
+
+}
