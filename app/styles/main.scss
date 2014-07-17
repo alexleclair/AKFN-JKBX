@@ -183,7 +183,7 @@ p.result{
     margin:0;
     padding:5px;
     width:100%;
-    background:#ccc;
+    cursor:pointer;
 
 }
 
@@ -250,6 +250,10 @@ p.result{
 }
 
 .page.search{
+    span.tt-dropdown-menu{
+        position:relative !important;
+        background:transparent;
+    }
     ::-webkit-input-placeholder {
        font-weight: lighter;
        color: black;
@@ -320,7 +324,7 @@ p.result{
     }
 }
 
-a.search-icon, a.back-icon{
+a.search-icon, a.back-icon, a.list-icon, a.random-icon{
     font-size:300%;
     color:#535252;
     display:block;
@@ -329,8 +333,17 @@ a.search-icon, a.back-icon{
     left:15%;
     margin-left:-30px;
     cursor:pointer;
+    opacity:0.6;
 
     &:hover{
         color:#000;
+        opacity:1;
     }
 }
+
+a.list-icon, a.random-icon{
+    left:initial;
+    right:15%;
+    margin-left:30px;
+}
+

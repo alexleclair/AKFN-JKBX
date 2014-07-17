@@ -24,6 +24,22 @@ App =
 				App.gotoPage 'search'
 				return false;
 
+			$('a.list-icon').on 'click', (e)->
+				e.preventDefault();
+				App.gotoPage 'list'
+				return false;
+
+			$('a.random-icon').on 'click', (e)->
+				e.preventDefault();
+				_artist = '';
+				_artists = []
+				for key of App.songs
+					if App.songs[key].artist? && App.songs[key].artist.length > 0
+						_artists.push App.songs[key].artist[Math.floor(Math.random()*App.songs[key].artist.length)]
+				_artist = _artists[Math.floor(Math.random()*_artists.length)];
+				$('.tt-input.search').focus().typeahead('val', _artist).typeahead('open')
+				return false;
+
 			$('a.back-icon').on 'click', (e)->
 				e.preventDefault();
 				App.gotoPage 'playlist'
@@ -56,15 +72,12 @@ App =
 
 		$('input.search').on 'typeahead:selected', (e, suggestion, dataset) ->
 			App.vote suggestion.id
-			$('.tt-input.search').typeahead('val', '')
+			$('.tt-input.search').typeahead('val', '').blur()
 			App.gotoPage 'playlist';
 
 			return false;
 
-		$('.search').on 'click', (e)->
-			if !$(this).is('animated')
-				$(this).addClass 'animated'
-				$(this).val ''
+		
 
 
 		App.socket.on 'config', (config)->
@@ -188,6 +201,29 @@ App =
 	gotoPage:(page)->
 		$('.page').not('.'+page).fadeOut 'fast', ->
 			$('.page.'+page).fadeIn 'fast', ->
+				if page == 'list'
+					_songs = []
+					for key of App.songs
+						_artist = App.songs[key].artist.join(' & ')
+						if _songs.indexOf(_artist) == -1
+							_songs.push _artist
+						console.log _songs
+
+					_songs.sort (a,b)->
+						if App.songs[a].toUpperCase() < App.songs[b].toUpperCase()
+							return -1
+							
+						if App.songs[a].toUpperCase() > App.songs[b].toUpperCase()
+							return 1
+
+						return 0;
+					$ul = $('.page.list ul:first')
+					$ul.html('');
+					for i in [0..._songs.length]
+						$li = $('<li />').text('test');
+						$ul.append('<li />')
+							
+
 				if page == 'playlist'
 					App.setPlaylist()
 					# $search = $('input.search.tt-input');
@@ -230,7 +266,7 @@ App =
 
 				for j in [0...tests.length]
 					if song.title.toLowerCase().split(' ').indexOf(word) >= 0
-						rank += 15
+						rank += 30
 					if tests[j].toLowerCase().split(' ').join('').indexOf(word) >= 0
 						rank += 8
 					if tests[j].toLowerCase().replace(/[aeiou]/ig,'').split(' ').indexOf(word.replace(/[aeiou]/ig,'')) >= 0
@@ -262,10 +298,8 @@ App =
 				return 1;
 			return 0
 
-		x = _songs.splice(0,15);
-		__songs = []
-		for i in [0...x.length]
-			__songs.push x[i].title+' - '+x[i].artist
+		x = _songs.splice(0,60);
+		# x.reverse();
 		process(x);
 		return __songs
 
