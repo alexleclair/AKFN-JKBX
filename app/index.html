@@ -6,9 +6,9 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>AKFN JKBX</title>
+        <title>JKBX</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+        <meta name="viewport" content="width=640">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
@@ -16,6 +16,7 @@
         <!-- build:js scripts/vendor/modernizr.js -->
         <script src="bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700' rel='stylesheet' type='text/css'>
     </head>
     <body>
         <!--[if lt IE 10]>
@@ -24,6 +25,9 @@
 
 
         <div class="container">
+            <div class="logo">
+                <img src="images/logo.png" />
+            </div>
             <div class="page loading active">
                 <span class="glyphicon glyphicon-refresh loading"></span>
                 <p class="loadjs hide">Loading external dependencies</p>
@@ -34,23 +38,25 @@
 
             <div class="page login">
                 <div class="jumbotron">
-                    <h1><!-- Akufen SongCamp --></h1>
                     <p class="lead">Entre ton code, bro.</p>
-                    <p><input type="text" /><a class="btn btn-lg btn-success" href="#">Splendid!</a></p>
+                    <p><input type="text" /><br /><br /><a class="btn btn-lg btn btn-default" href="#">GO</a></p>
                 </div>
             </div>
 
             <div class="page playlist">
-                <div class="logo">
-                    <img src="images/logo.png" />
-                    <h1>Jukebox</h1>
-                    <h2>Un jukebox dont vous êtes le héros et nous les victimes.</h2>
-                </div>
-                <input type="text" class="search" placeholder="Recherche ta toune" autocomplete="off" />
-                <h2>Tounes en attente</h2>
-                <ul class="list-group">
+                <a class="search-icon">
+                    <span class="glyphicon glyphicon-search"></span>
+                </a>
+                <ul class="list-group clearfix">
                     
                 </ul>
+            </div>
+
+             <div class="page search">
+                <a class="back-icon">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                </a>
+                <input type="text" class="search" placeholder="Recherche ta toune" autocomplete="off" />
             </div>
 
            <!--  <div class="footer">

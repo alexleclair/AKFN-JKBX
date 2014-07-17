@@ -4,6 +4,12 @@ App =
 		server:
 			requireLogin:false
 			allowAnonymous:true
+		user:{
+			canDelete:false,
+			canRevote:false,
+			canSkip:false,
+			voteLimit:false
+		}
 
 	socket:null
 	code:null
@@ -13,6 +19,16 @@ App =
 			App.onLoad();
 			$('.page.loading p').removeClass('hide').hide().filter('.loadjs').show();
 
+			$('a.search-icon').on 'click', (e)->
+				e.preventDefault();
+				App.gotoPage 'search'
+				return false;
+
+			$('a.back-icon').on 'click', (e)->
+				e.preventDefault();
+				App.gotoPage 'playlist'
+				return false;
+
 	onLoad:()->
 		App.socket = io(App.config.endpoint);
 		$('.page.loading p').removeClass('hide').hide().filter('.connecting').show();
@@ -21,7 +37,7 @@ App =
 			$('.page.loading p').fadeOut('fast')
 			$('.page.loading p.fetching').fadeIn('fast')
 
-		$(".search").typeahead 
+		$("input.search").typeahead 
 			minLength:2,
 			highlight:false
 		,
@@ -38,8 +54,10 @@ App =
 				].join("\n"),
 				suggestion:Handlebars.compile('<p class="result"><strong>{{title}}</strong><br /> {{artist}} <br/> <em>{{album}}</em></p>')
 
-		$('.search').on 'typeahead:selected', (e, suggestion, dataset) ->
+		$('input.search').on 'typeahead:selected', (e, suggestion, dataset) ->
 			App.vote suggestion.id
+			$('.tt-input.search').typeahead('val', '')
+			App.gotoPage 'playlist';
 
 			return false;
 
@@ -64,12 +82,9 @@ App =
 			alert data
 
 		App.socket.on 'addSong', (song,id)->
-			console.log 'add song ', song
 			App.songs[id] = song;
 
 		App.socket.on 'removeSong', (songId)->
-			console.log 'delete song ', songId
-
 			if App.songs[songId]?
 				delete App.songs[songId]
 
@@ -78,7 +93,7 @@ App =
 			$('.page.loading p.fetching').fadeOut 'slow', ->
 				$('.page.loading p.ready').hide().fadeIn 'slow', ->
 					setTimeout ->
-						if App.config.server.requireLogin || !App.config.server.allowAnonymous 
+						if App.config.server.requireLogin || !App.config.server.allowAnonymous || (location.search+'').indexOf('login') >= 0
 							$('body').addClass('require-login')
 							App.gotoPage('login');
 						else
@@ -86,6 +101,7 @@ App =
 					, 700
 
 		App.socket.on 'loggedin', (data)->
+			App.config.user = data
 			App.gotoPage('playlist');
 
 	setPlaylist:(data)->
@@ -95,54 +111,102 @@ App =
 		$ul.html('');
 		for i in [0...data.length]
 			song = data[i]
-			$li = $('<li/>').text(song.artist.join(' & ') + ' - ' + song.title).attr('data-id', song.id)
+			$li = $('<li/>').html(App.getSongHtml(song)).attr('data-id', song.id)
 
-			if App.code?
+			if App.config.user.canRevote? && App.config.user.canRevote
 				$a = $('<a />').html('<span class="glyphicon glyphicon-thumbs-up"></span>').addClass('up');
 				$li.append($a)
 				$a = $('<a />').html('<span class="glyphicon glyphicon-thumbs-down"></span>').addClass('down');
 				$li.append($a);
-			$li.addClass('list-group-item')
 
-			$li.find('a').on 'click', (e)->
+			if App.config.user.canDelete? && App.config.user.canDelete
+				$a = $('<a />').html('<span class="glyphicon glyphicon-remove"></span>').addClass('remove');
+				$li.append($a);
+
+			# $li.addClass('list-group-item')
+
+			$li.find('a.up, a.down').on 'click', (e)->
 				e.preventDefault();
 				App.vote $(this).parent().attr('data-id'), if $(this).is('.up') then 1 else -1
 				return false;
+
+
 			if song.isCurrent? && song.isCurrent
 				$li.addClass('disabled');
 				$li.find('a').remove();
 			$ul.append $li;
 		if $ul.find('li.disabled').length == 0 && App.currentSong?
 			song = App.currentSong
-			$li = $('<li/>').text(song.artist.join(' & ') + ' - ' + song.title).attr('data-id', song.id).addClass('disabled list-group-item')
+			html = App.getSongHtml(song);
+
+			$li = $('<li/>').html(html).attr('data-id', song.id).addClass('current')
+			if App.config.user.canSkip? && App.config.user.canSkip
+				$a = $('<a />').html('<span class="glyphicon glyphicon-remove"></span>').addClass('skip');
+				$li.append($a);
 			$ul.prepend($li);
+
+		$ul.find('a.skip, a.remove').on 'click', (e)->
+				e.preventDefault();
+				id = $(this).parent().attr('data-id');
+				if $(this).is('.remove')
+					App.socket.emit 'remove', id
+				if $(this).is('.skip')
+					App.socket.emit 'skip', id
+				return false;
+
 		App.playlist = data;
 
 	login:(code)->
 		App.code = code
 		App.socket.emit 'login', {code}
 
-	gotoPage:(page)->
-		$('.page').not('.'+page).slideUp 'fast', ->
-			$('.page.'+page).slideDown 'fast', ->
-				if page == 'playlist'
-					$search = $('input.search.tt-input');
-					$search.focus()
-					clearInterval App.demoInterval
-					App.demoInterval = setInterval ()->
-						val = $search.val();
-						text = $search.attr('placeholder');
-						if val? && val.length == text.length
-							clearInterval App.demoInterval;
-							App.demoInterval = setInterval ()->
-								$search.val('')
-								clearInterval App.demoInterval
-							, 1000
-							return;
-						val = val + '' + text.substr(val.length,1);
-						$search.val(val);
 
-					, 80
+	getSongHtml:(song)->
+		html = '<div class="info">';
+		if song.artist? && song.artist.length > 0
+			html += '<span class="artist">' + $('<div />').text(song.artist.join(' & ')).html() + '</span>';
+
+		if song.artist? && song.artist.length? && song.album? && song.album.length > 0
+			html += ' &mdash; ';
+
+		if song.album?
+			html += '<span class="album">' + $('<div />').text(song.album).html() + '</span>'
+
+		html += '</div>'
+
+		info = html;
+
+		html = '';
+
+		html += '<span class="title">' + $('<div />').text(song.title).html() + '</span>'
+
+		if song != App.currentSong
+			html += info;
+		else
+			html = info+html
+
+	gotoPage:(page)->
+		$('.page').not('.'+page).fadeOut 'fast', ->
+			$('.page.'+page).fadeIn 'fast', ->
+				if page == 'playlist'
+					App.setPlaylist()
+					# $search = $('input.search.tt-input');
+					# $search.focus()
+					# clearInterval App.demoInterval
+					# App.demoInterval = setInterval ()->
+					# 	val = $search.val();
+					# 	text = $search.attr('placeholder');
+					# 	if val? && val.length == text.length
+					# 		clearInterval App.demoInterval;
+					# 		App.demoInterval = setInterval ()->
+					# 			$search.val('')
+					# 			clearInterval App.demoInterval
+					# 		, 1000
+					# 		return;
+					# 	val = val + '' + text.substr(val.length,1);
+					# 	$search.val(val);
+
+					# , 80
 
 	vote:(song, score=1)->
 		console.log 'Vote', song, score

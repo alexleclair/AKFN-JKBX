@@ -27,13 +27,13 @@ App =
 	_player: require('player')
 	player:null
 	isPlaying:false
-	codes:
-		XNDK2:10,
-		XNDK3:10,
-		XNDK9:10,
-		XNDK0:10
+	codes:{}
 
-	init:()->
+	init:(config)->
+		App.config = config
+
+		App.codes = require('./codes.json')
+
 		App.app = App.express()
 		App.server = require('http').createServer(App.app);
 		App.io = require('socket.io')(App.server);
@@ -44,18 +44,6 @@ App =
 		App.io.on 'connection', App.onConnect
 		Player = require('player');
 		
-		# setTimeout App.play, 10000;
-		
-		# App.walk App.config.songs.path, (err, results)->
-		# 	if err
-		# 		throw err;
-		# 	results.sort (a,b)->
-		# 		val = Math.floor(Math.random()*2-1);
-		# 		return val
-		# 	for i in [0...results.length]
-		# 		App.addSong(results[i], i*3)
-
-
 		App.watcher = App.chokidar.watch(App.config.songs.path, {ignored: /[\/\\]\./, persistent: true, interval:2000, binaryInterval:3000, usePolling:true});
 		App.watcher.on 'add', (path)->
 			App.addSong path
@@ -184,7 +172,22 @@ App =
 
 			isAuthenticated = true;
 			code = data.code;
-			socket.emit 'loggedin', true
+			socket.emit 'loggedin', App.codes[code]
+
+		socket.on 'skip', (songId)->
+			if !code? || !App.codes? || !App.codes[code]? || !App.codes[code].canSkip
+				return App.sendError socket, 'You can\'t do that!'
+			App.play()
+
+		socket.on 'remove', (songId)->
+			if !code? || !App.codes? || !App.codes[code]? || !App.codes[code].canDelete
+				return App.sendError socket, 'You can\'t do that!'
+			for i in [0...App.playlist.length]
+				if App.playlist[i].id == songId
+					App.playlist.splice(i,1);
+					break;
+			App.io.emit 'playlist', App.playlist
+
 
 		socket.on 'vote', (data) ->
 			if !code?
@@ -196,11 +199,14 @@ App =
 			if !App.songs? || !App.songs[data.id]?
 				return App.sendError socket, 'Unknown song'
 			
-			score = if data.score > 0 then 1 else -1
+			score = if parseInt(data.score) > 0 then 1 else -1
+			console.log 'Score', score
 
 			for i in [0...App.playlist.length]
 				if App.playlist[i].id == data.id
+					console.log 'Found it', data.id, App.playlist[i]
 					score = 1*score + 1*App.playlist[i].count
+					console.log 'new score', score
 					App.playlist.splice i, 1
 					break;
 
@@ -211,9 +217,9 @@ App =
 
 			App.playlist.sort (a,b)->
 				if a.count < b.count
-					return -1
-				if a.count > b.count
 					return 1
+				if a.count > b.count
+					return -1
 				return 0;
 
 			App.io.emit 'playlist', App.playlist
@@ -236,5 +242,5 @@ App =
 			socket.emit('problem', text);
 
 
-App.init();
+App.init(require('./config.json'));
 

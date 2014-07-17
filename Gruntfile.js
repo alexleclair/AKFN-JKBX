@@ -1,4 +1,4 @@
-// Generated on 2014-07-14 using generator-webapp 0.4.4
+// Generated on 2014-04-09 using generator-webapp 0.4.4
 'use strict';
 
 // # Globbing
@@ -7,7 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     // show elapsed time at the end
     require('time-grunt')(grunt);
     // load all grunt tasks
@@ -210,7 +210,7 @@ module.exports = function (grunt) {
         },
         usemin: {
             options: {
-                assetsDirs: ['<%= yeoman.dist %>']
+                assetsDirs: ['<%= yeoman.dist %>', '<%= yeoman.dist %>/images']
             },
             html: ['<%= yeoman.dist %>/{,*/}*.html'],
             css: ['<%= yeoman.dist %>/styles/{,*/}*.css']
@@ -285,7 +285,7 @@ module.exports = function (grunt) {
                         '.htaccess',
                         'images/{,*/}*.{webp,gif}',
                         'styles/fonts/{,*/}*.*',
-                        'bower_components/sass-bootstrap/fonts/*.*'
+                        'bower_components/sass-bootstrap/fonts/*.*',
                     ]
                 }]
             },
@@ -296,16 +296,6 @@ module.exports = function (grunt) {
                 dest: '.tmp/styles/',
                 src: '{,*/}*.css'
             }
-        },
-        modernizr: {
-            devFile: '<%= yeoman.app %>/bower_components/modernizr/modernizr.js',
-            outputFile: '<%= yeoman.dist %>/bower_components/modernizr/modernizr.js',
-            files: [
-                '<%= yeoman.dist %>/scripts/{,*/}*.js',
-                '<%= yeoman.dist %>/styles/{,*/}*.css',
-                '!<%= yeoman.dist %>/scripts/vendor/*'
-            ],
-            uglify: true
         },
         concurrent: {
             server: [
@@ -328,7 +318,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('serve', function (target) {
+    grunt.registerTask('serve', function(target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -342,9 +332,9 @@ module.exports = function (grunt) {
         ]);
     });
 
-    grunt.registerTask('server', function () {
-      grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-      grunt.task.run(['serve']);
+    grunt.registerTask('server', function() {
+        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
+        grunt.task.run(['serve']);
     });
 
     grunt.registerTask('test', [
@@ -363,9 +353,8 @@ module.exports = function (grunt) {
         'concat',
         'cssmin',
         'uglify',
-        'modernizr',
         'copy:dist',
-        'rev',
+        // 'rev',
         'usemin'
     ]);
 

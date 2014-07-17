@@ -1,0 +1,8 @@
+{
+    "ZXCDF": {
+        "canRevote": true,
+        "canSkip": true,
+        "canDelete": true,
+        "voteLimit": false
+    }
+}

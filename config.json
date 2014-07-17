@@ -1,0 +1,15 @@
+{
+    "http": {
+        "port": 8090,
+        "host": "0.0.0.0"
+    },
+    "songs": {
+        "path": "/Users/stax/Music/iTunes/iTunes Music",
+        "watch": true,
+        "addWaitTime": 3
+    },
+    "client": {
+        "requireLogin": false,
+        "allowAnonymous": true
+    }
+}
