@@ -191,6 +191,9 @@ p.result{
             font-size:20px;
         }
     }
+    ul{
+        margin-top:30px;
+    }
     ul li{
         // background:$text-color;
         // color:$body-bg;
@@ -204,6 +207,7 @@ p.result{
             font-size:120%;
             margin:0 0 0 10px;
         }
+        // background:transparent;
     }
     
     ::-webkit-input-placeholder {
@@ -239,6 +243,13 @@ p.result{
         text-transform: uppercase;
         font-size: 150%;
         font-weight: light;
+        &.tt-input{
+            // background:rgba(255,255,255,0.3) !important;
+            transition:all 0.5s ease-in;
+            &:focus{
+                // background:rgba(255,255,255,0.7) !important;
+            }
+        }
     }
 
 }

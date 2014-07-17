@@ -22,6 +22,12 @@ git clone [git-repo-url] jukebox
 cd jukebox
 npm install
 bower install
+grunt build
+```
+
+Running it
+--------------
+```sh
 coffee app.coffee
 ```
 

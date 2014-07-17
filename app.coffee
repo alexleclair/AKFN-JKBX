@@ -6,6 +6,9 @@ App =
 			host:'0.0.0.0'
 		songs:
 			path:'/Users/stax/Music/iTunes/iTunes Music'
+			# path:'/Users/stax/Desktop/songs'
+			watch:true
+			addWaitTime:3 #ms
 		client:
 			requireLogin:false
 			allowAnonymous:true
@@ -15,7 +18,9 @@ App =
 	app:null
 	server:null
 	fs:require('fs')
-	
+	chokidar:require('chokidar');
+	watcher:null
+	lastAdd:0
 	songs:{}
 	playlist:[]
 	mm: require('musicmetadata');
@@ -41,14 +46,25 @@ App =
 		
 		# setTimeout App.play, 10000;
 		
-		App.walk App.config.songs.path, (err, results)->
-			if err
-				throw err;
-			results.sort (a,b)->
-				val = Math.floor(Math.random()*2-1);
-				return val
-			for i in [0...results.length]
-				App.addSong(results[i], i*3)
+		# App.walk App.config.songs.path, (err, results)->
+		# 	if err
+		# 		throw err;
+		# 	results.sort (a,b)->
+		# 		val = Math.floor(Math.random()*2-1);
+		# 		return val
+		# 	for i in [0...results.length]
+		# 		App.addSong(results[i], i*3)
+
+
+		App.watcher = App.chokidar.watch(App.config.songs.path, {ignored: /[\/\\]\./, persistent: true, interval:2000, binaryInterval:3000, usePolling:true});
+		App.watcher.on 'add', (path)->
+			App.addSong path
+		App.watcher.on 'change', (path)->
+			App.addSong path
+		App.watcher.on 'unlink', (path)->
+			console.log 'Removed song', path
+			App.io.emit 'removeSong', path
+			delete App.songs[path]
 
 
 	play:()->
@@ -81,13 +97,22 @@ App =
 				App.isPlaying= true;
 			, 1000
 
-	addSong:(file, wait=0)->
+	addSong:(file, wait=true, addTime=2000)->
+		waitTime = 0;
+		if wait
+			_now = Date.now()
+			App.lastAdd = if App.lastAdd > _now then App.lastAdd + App.config.songs.addWaitTime else _now + App.config.songs.addWaitTime
+			waitTime = App.lastAdd - _now;
+		if waitTime < 0
+			waitTime = 0;
+		if wait
+			waitTime = waitTime + addTime
 		setTimeout ->
 			try
 
 				stream = fs.createReadStream(file);
 				stream.on 'error', ()->
-					console.log 'error?'
+					console.log 'error?', arguments
 				parser = App.mm(stream);
 				parser.on 'metadata', (result)->
 					song = {
@@ -97,6 +122,7 @@ App =
 						path:file
 					}
 					App.songs[file] = song
+					App.io.emit 'addSong', song,file
 					console.log 'added',file
 
 				parser.on 'done', ()->
@@ -106,7 +132,7 @@ App =
 			catch e
 				# ...
 			
-		, wait
+		, waitTime
 
 	walk: (dir, done) ->
 		results = []

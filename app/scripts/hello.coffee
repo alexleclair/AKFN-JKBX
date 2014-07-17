@@ -1,6 +1,6 @@
 App = 
 	config:
-		endpoint:'http://localhost:8090/'
+		endpoint:'/'
 		server:
 			requireLogin:false
 			allowAnonymous:true
@@ -43,9 +43,11 @@ App =
 
 			return false;
 
+		$('.search').on 'click', (e)->
+			if !$(this).is('animated')
+				$(this).addClass 'animated'
+				$(this).val ''
 
-		App.socket.on 'playing', (song)->
-			console.log 'playing', song
 
 		App.socket.on 'config', (config)->
 			App.config.server = config
@@ -61,12 +63,23 @@ App =
 		App.socket.on 'problem', (data)->
 			alert data
 
+		App.socket.on 'addSong', (song,id)->
+			console.log 'add song ', song
+			App.songs[id] = song;
+
+		App.socket.on 'removeSong', (songId)->
+			console.log 'delete song ', songId
+
+			if App.songs[songId]?
+				delete App.songs[songId]
+
 		App.socket.on 'songs', (data)->
 			App.songs = data
 			$('.page.loading p.fetching').fadeOut 'slow', ->
 				$('.page.loading p.ready').hide().fadeIn 'slow', ->
 					setTimeout ->
 						if App.config.server.requireLogin || !App.config.server.allowAnonymous 
+							$('body').addClass('require-login')
 							App.gotoPage('login');
 						else
 							App.gotoPage('playlist')
@@ -83,10 +96,13 @@ App =
 		for i in [0...data.length]
 			song = data[i]
 			$li = $('<li/>').text(song.artist.join(' & ') + ' - ' + song.title).attr('data-id', song.id)
-			$a = $('<a />').html('<span class="glyphicon glyphicon-thumbs-up"></span>').addClass('up');
-			$li.append($a)
-			$a = $('<a />').html('<span class="glyphicon glyphicon-thumbs-down"></span>').addClass('down');
-			$li.append($a).addClass('list-group-item')
+
+			if App.code?
+				$a = $('<a />').html('<span class="glyphicon glyphicon-thumbs-up"></span>').addClass('up');
+				$li.append($a)
+				$a = $('<a />').html('<span class="glyphicon glyphicon-thumbs-down"></span>').addClass('down');
+				$li.append($a);
+			$li.addClass('list-group-item')
 
 			$li.find('a').on 'click', (e)->
 				e.preventDefault();
@@ -108,7 +124,25 @@ App =
 
 	gotoPage:(page)->
 		$('.page').not('.'+page).slideUp 'fast', ->
-			$('.page.'+page).slideDown('fast');
+			$('.page.'+page).slideDown 'fast', ->
+				if page == 'playlist'
+					$search = $('input.search.tt-input');
+					$search.focus()
+					clearInterval App.demoInterval
+					App.demoInterval = setInterval ()->
+						val = $search.val();
+						text = $search.attr('placeholder');
+						if val? && val.length == text.length
+							clearInterval App.demoInterval;
+							App.demoInterval = setInterval ()->
+								$search.val('')
+								clearInterval App.demoInterval
+							, 1000
+							return;
+						val = val + '' + text.substr(val.length,1);
+						$search.val(val);
+
+					, 80
 
 	vote:(song, score=1)->
 		console.log 'Vote', song, score
@@ -191,10 +225,10 @@ Cookie =
 			return unescape(document.cookie.substring(c_start, c_end));
 window.Cookie = Cookie
 $ ->
-	if (window.location+'').indexOf('ngrok.com') >= 0
+	if false && ((window.location+'').indexOf('ngrok.com') >= 0 || (window.location+'').indexOf('jukebox.zloche.net') >= 0)
 		App.config.endpoint = 'http://dc3cd24.ngrok.com:80/';
-	else if (window.location+'').indexOf('/localhost') < 0
-		App.config.endpoint = '/'
+	else if (window.location+'').indexOf('/localhost:9000') >= 0
+		App.config.endpoint = 'http://localhost:8090/'
 	App.init();
 	code = Cookie.read 'code'
 	if code? && code != ''
