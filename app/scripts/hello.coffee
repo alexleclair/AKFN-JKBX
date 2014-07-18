@@ -61,6 +61,7 @@ App =
 				clearTimeout App._searchTimer
 				App._searchTimer = setTimeout ()->
 					App.search query, process
+					ga('send','pageview', '/search/'+encodeURIComponent(query))
 				, 500
 			,
 			displayKey: 'title'
@@ -172,6 +173,7 @@ App =
 	login:(code)->
 		App.code = code
 		App.socket.emit 'login', {code}
+		ga('send','pageview', '/login/'+encodeURIComponent(code))
 
 
 	getSongHtml:(song)->
@@ -199,31 +201,36 @@ App =
 			html = info+html
 
 	gotoPage:(page)->
+		ga('send','pageview', '/virtual/'+encodeURIComponent(page))
 		$('.page').not('.'+page).fadeOut 'fast', ->
+			if page == 'list'
+				_songs = []
+				cache = {}
+				for key of App.songs
+					_artist = App.songs[key].artist.join(' & ') + ''
+					if _artist? && _artist != '' && !cache[_artist]?
+						_songs.push _artist
+						cache[_artist] = true
+
+				_songs.sort (a,b)->
+					if a.toUpperCase() < b.toUpperCase()
+						return -1
+						
+					if a.toUpperCase() > b.toUpperCase()
+						return 1
+
+					return 0;
+				$ul = $('.page.list ul:first')
+				$ul.html('');
+				for i in [0..._songs.length]
+					$li = $('<li />').text(_songs[i]);
+					$li.on 'click', (e)->
+						App.gotoPage 'search'
+						$('.tt-input.search').focus().typeahead('val', $(this).text()).typeahead('open')
+					$ul.append($li)
 			$('.page.'+page).fadeIn 'fast', ->
-				if page == 'list'
-					_songs = []
-					for key of App.songs
-						_artist = App.songs[key].artist.join(' & ')
-						if _songs.indexOf(_artist) == -1
-							_songs.push _artist
-						console.log _songs
-
-					_songs.sort (a,b)->
-						if App.songs[a].toUpperCase() < App.songs[b].toUpperCase()
-							return -1
-							
-						if App.songs[a].toUpperCase() > App.songs[b].toUpperCase()
-							return 1
-
-						return 0;
-					$ul = $('.page.list ul:first')
-					$ul.html('');
-					for i in [0..._songs.length]
-						$li = $('<li />').text('test');
-						$ul.append('<li />')
-							
-
+				if page == 'search'
+					$('.tt-input.search').focus();
 				if page == 'playlist'
 					App.setPlaylist()
 					# $search = $('input.search.tt-input');
@@ -247,6 +254,7 @@ App =
 	vote:(song, score=1)->
 		console.log 'Vote', song, score
 		App.socket.emit 'vote', {id:song, score:score}
+		ga('send','pageview', '/vote/'+score+'/'+encodeURIComponent(song))
 
 	search:(query, process)->
 

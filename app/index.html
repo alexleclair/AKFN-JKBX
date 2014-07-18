@@ -8,6 +8,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>JKBX</title>
         <meta name="description" content="">
+        <meta name="description" content="JKBX - Un jukebox dont vous êtes le héros et nous les victimes.">
+        <meta property="og:title" content="JKBX">
+        <meta property="og:url" content="http://jkbx.ca/">
+        <meta property="og:site_name" content="JKBX">
+        <meta property="og:description" content="JKBX - Un jukebox dont vous êtes le héros et nous les victimes.">
         <meta name="viewport" content="width=480">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <!-- build:css(.tmp) styles/main.css -->
@@ -30,10 +35,10 @@
             </div>
             <div class="page loading active">
                 <span class="glyphicon glyphicon-refresh loading"></span>
-                <p class="loadjs hide">Loading external dependencies</p>
-                <p class="connecting hide">Connecting to server</p>
-                <p class="fetching hide">Fetching songs</p>
-                <p class="ready hide">Ready</p>
+                <p class="loadjs hide">Chargement des dépendences externes</p>
+                <p class="connecting hide">Connexion au serveur</p>
+                <p class="fetching hide">Récupération des chansons</p>
+                <p class="ready hide">Prêt!</p>
             </div>
 
             <div class="page login">
@@ -46,6 +51,10 @@
             <div class="page playlist">
                 <a class="search-icon">
                     <span class="glyphicon glyphicon-search"></span>
+                </a>
+
+                <a class="list-icon">
+                    <span class="glyphicon glyphicon-list"></span>
                 </a>
 
                 <ul class="list-group clearfix">
@@ -64,7 +73,10 @@
             </div>
 
             <div class="page list">
-                <h2>Artistes disponibles</h2>
+                <a class="back-icon">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                </a>
+                <h2>Liste des artistes</h2>
                 <ul>
 
                 </ul>
@@ -90,7 +102,7 @@
             e=o.createElement(i);r=o.getElementsByTagName(i)[0];
             e.src='//www.google-analytics.com/analytics.js';
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-            ga('create','UA-11629402-4');ga('send','pageview');
+            ga('create','UA-52978187-1');ga('send','pageview');
         </script>
 
         <!-- build:js scripts/main.js -->

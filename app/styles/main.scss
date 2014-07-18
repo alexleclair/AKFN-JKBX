@@ -249,6 +249,34 @@ p.result{
 
 }
 
+.page.list{
+    padding-left:30px;
+    padding-right:30px;
+    h2{
+        color:#535252;
+        font-size:350%;
+        border-bottom:5px solid #535252;
+        text-transform: uppercase;
+        margin-bottom:30px;
+    }
+    ul, li{
+        list-style: none;
+    }
+    ul{
+        padding:0;
+    }
+    li{
+        cursor:pointer;
+        font-weight: 700;
+        font-size:150%;
+        margin:12px 0;
+        color:#535252;
+        &:hover{
+            color:#000;
+        }
+    }
+}
+
 .page.search{
     span.tt-dropdown-menu{
         position:relative !important;
