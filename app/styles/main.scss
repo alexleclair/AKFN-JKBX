@@ -1,8 +1,27 @@
 $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
-$body-bg: #ffd430;
-$text-color: #000;
+$header-bg: #ffd430;
+$body-bg: #000;
+$text-color: #FFF;
 @import 'sass-bootstrap/lib/bootstrap';
 
+/* @import must be at top of file, otherwise CSS will not work */
+@import url("//hello.myfonts.net/count/25ed78");
+
+  
+@font-face {font-family: 'SwiftLTStd-Regular';src: url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_0_0.eot');src: url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_0_0.eot?#iefix') format('embedded-opentype'),url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_0_0.woff') format('woff'),url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_0_0.ttf') format('truetype');}
+ 
+  
+@font-face {font-family: 'SwiftLTStd-Italic';src: url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_1_0.eot');src: url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_1_0.eot?#iefix') format('embedded-opentype'),url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_1_0.woff') format('woff'),url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_1_0.ttf') format('truetype');}
+ 
+  
+@font-face {font-family: 'SwiftLTStd-Bold';src: url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_2_0.eot');src: url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_2_0.eot?#iefix') format('embedded-opentype'),url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_2_0.woff') format('woff'),url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_2_0.ttf') format('truetype');}
+ 
+  
+@font-face {font-family: 'NHaasGroteskTXStd-65Md';src: url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_3_0.eot');src: url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_3_0.eot?#iefix') format('embedded-opentype'),url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_3_0.woff') format('woff'),url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_3_0.ttf') format('truetype');}
+ 
+  
+@font-face {font-family: 'NHaasGroteskTXStd-75Bd';src: url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_4_0.eot');src: url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_4_0.eot?#iefix') format('embedded-opentype'),url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_4_0.woff') format('woff'),url('http://www.akufen.ca/app/assets/fonts/webfonts/25ED78_4_0.ttf') format('truetype');}
+ 
 .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
@@ -16,47 +35,13 @@ html{
     min-height: 100%;
 }
 body {
-    padding:30px;
-    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
-    background:url(../images/bg_yellow.png) repeat $body-bg;
+    padding:0;
+    padding-top:0;
+    font-family: 'NHaasGroteskTXStd-65Md', 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
+    background:$body-bg;
     min-height:100%;
     height:100%;
-}
-
-
-
-/* Everything but the jumbotron gets side spacing for mobile first views */
-.header,
-.marketing,
-.footer {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-/* Custom page header */
-.header {
-    border-bottom: 1px solid #e5e5e5;
-}
-
-/* Make the masthead heading the same height as the navigation */
-.header h3 {
-    margin-top: 0;
-    margin-bottom: 0;
-    line-height: 40px;
-    padding-bottom: 19px;
-}
-
-/* Custom page footer */
-.footer {
-    padding-top: 19px;
-    color: #777;
-    border-top: 1px solid #e5e5e5;
-}
-
-.container-narrow > hr {
-    margin: 30px 0;
-    min-height:100%;
-
+    margin:0;
 }
 
 /* Main marketing message and sign up button */
@@ -81,9 +66,9 @@ body {
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
-    .container {
-        max-width: 730px;
-    }
+    // .container {
+    //     max-width: 730px;
+    // }
 
     /* Remove the padding we set earlier */
     .header,
@@ -116,21 +101,25 @@ body {
     p{
         margin-top:5%;
         font-size:130%;
-        text-transform: uppercase;
-        font-family: 'Helvetica Neue', Helvetica, Arial;
+        // text-transform: uppercase;
+        font-family: 'NHaasGroteskTXStd-65Md', 'Helvetica Neue', Helvetica, Arial;
         font-weight: lighter;
 
     }
-    span.loading{
-        animation: loading 2s 0s infinite ease-in-out;
+    img.loading{
+        width:10%;
+        margin:0 auto;
+        height:auto;
+        animation: loading 2s 0s infinite linear;
         opacity:1;
-        margin-top:25%;
+        margin-top:10%;
         font-size:2000%;
 
         @media (max-width:$screen-sm-max){
             font-size:500%;
         }
     }
+    color:#FFF;
 }
 
 @keyframes loading {
@@ -192,72 +181,129 @@ p.result{
     ul{
         margin-top:0;
         list-style: none;
+        margin:20px 50px 10px 50px;
     }
-    ul li{
+
+}
+
+.page.playlist, .page.search{
+    ul, .constraint{
+        position:relative;
+        @media (min-width:980px){
+            font-size:22px;
+        }
+    }
+    ul{
+        @media (min-width:980px){
+            margin-left:0;
+            margin-right:0;
+        }
+    }
+    ul li.current .title, .search.input-tt{
+        font-size:500%;
+        @media (max-width:979px){
+            dont-size:400%;
+        }
+        float:none;
+        // text-transform: uppercase;
+        // text-align: justify;
+        padding-top:30px;
+        line-height: 100%;
+        margin-bottom:30px;
+    }
+    .tt-suggestion{
+        .title, .info{
+            transition:color 0.25s ease-in-out;
+        }
+        &:hover{
+            cursor:pointer;
+            .title, .info{
+                color:#ffd430;
+            }
+        }
+    }
+    ul li, .tt-suggestion{
         clear:both;
         list-style: none;
 
         // text-transform: uppercase;
         position:relative;
-        border:none;
+        // border:none;
         a{
             display:inline-block;
             font-size:200%;
             margin:10px 25px 0 25px;
         }
-        color:#535252;
+        color:#FFF;
         margin:30px 15px;
+        font-family: 'NHaasGroteskTXStd-65Md', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         .title{
             float:left;
-            font-size:150%;
+            font-size:110%;
             font-weight: 900;
             width:100%;
+            margin-bottom:5px;
 
+        }
+        .info{
+            color:#8c8c8c;
+            font-family: 'SwiftLTStd-Regular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
         &.current{
             word-wrap:break-word;
             .title{
-                font-size:500%;
-                float:none;
-                text-transform: uppercase;
-                text-align: justify;
+                display:block;
             }
             .info{
-                float:left;
+                // float:left;
                 width:100%;
-            }
-            border-bottom:5px solid #535252;
-            &:after{
-                width: 0; 
-                height: 0; 
-                border-left: 8px solid transparent;
-                border-right: 8px solid transparent;
-                
-                border-top: 6px solid #535252;
-                position:absolute;
-                left:50%;
-                content:"";
-                // position:absolute;
-                // bottom:-5px;
-                // left:50%;
-                margin-left:-4px;
-                bottom:-10px;
             }
         }
     }
+}
 
+.border-title{
+    position:relative;
+    border-top:none;
+    border-left:none;
+    border-right:none;
+    border-bottom:3px solid #2a2a2a;
+    &:after{
+        width: 0; 
+        height: 0; 
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        
+        border-top: 6px solid #2a2a2a;
+        position:absolute;
+        left:50%;
+        content:"";
+        // position:absolute;
+        // bottom:-5px;
+        // left:50%;
+        margin-left:-4px;
+        bottom:-9px;
+    }
 }
 
 .page.list{
     padding-left:30px;
     padding-right:30px;
+    
     h2{
-        color:#535252;
-        font-size:350%;
-        border-bottom:5px solid #535252;
-        text-transform: uppercase;
+        margin-top:70px;
+        color:#FFF;
+        font-size:500%;
+        @media (min-width:980px){
+            font-size:700%;
+        }
+        text-transform: normal;
         margin-bottom:30px;
+        font-family: 'NHaasGroteskTXStd-65Md', 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
+        font-weight: bold;
+        padding-bottom:20px;
+
     }
     ul, li{
         list-style: none;
@@ -269,36 +315,39 @@ p.result{
         cursor:pointer;
         font-weight: 700;
         font-size:150%;
-        margin:12px 0;
-        color:#535252;
+        margin:17px 0;
+        color:#FFF;
+        transition:color 0.25s ease-in-out;
         &:hover{
-            color:#000;
+            color:#ffd430;
         }
     }
 }
 
 .page.search{
+    padding:20px 50px 10px 50px;
+
     span.tt-dropdown-menu{
         position:relative !important;
         background:transparent;
     }
     ::-webkit-input-placeholder {
        font-weight: lighter;
-       color: black;
+       color: #2a2a2a;
     }
 
     :-moz-placeholder { /* Firefox 18- */
        font-weight: lighter;
-       color: black;  
+       color: #2a2a2a;  
     }
 
     ::-moz-placeholder {  /* Firefox 19+ */
-       color: black;
+       color: #2a2a2a;
        font-weight: lighter;  
     }
 
     :-ms-input-placeholder {  
-       color: black;  
+       color: #2a2a2a;  
        font-weight: lighter;
     }
     
@@ -306,14 +355,20 @@ p.result{
         width:100%;
     }
     .search{
+        color:#FFF;
         width:100%;
         border:none;
         outline:none !important;
-        border-bottom:2px solid #000;
         background:transparent;
-        height:50px;
-        text-transform: uppercase;
-        font-size: 150%;
+        border-radius: 0;
+        height:100px;
+        font-weight: 900;
+        font-family: 'NHaasGroteskTXStd-65Md', 'Helvetica Neue', Helvetica, Arial;
+        @media (min-width:980px){
+            height:150px;
+        }
+        // text-transform: uppercase;
+        font-size: 450%;
         font-weight: light;
         &.tt-input{
             // background:rgba(255,255,255,0.3) !important;
@@ -321,23 +376,25 @@ p.result{
             &:focus{
                 // background:rgba(255,255,255,0.7) !important;
             }
+            @extend .border-title;
+            margin-top:70px;
+            margin-left:15px;
+            margin-right:15px;
+            
         }
     }
 }
 
 .container{
-    background:url(../images/bg_grey.png) repeat;
     min-height: 100%;
     width:auto;
-    max-width: 700px;
-    .logo{
-        margin-top:-30px;
-    }
+    // max-width: 700px;
+    
     position:relative;
     margin-bottom:30px;
     // overflow: auto;
     // height:100%;
-
+    padding:0;
     .logo{
         text-align:center;
         margin-bottom:0px;
@@ -349,29 +406,123 @@ p.result{
         h2{
             font-size:20px;
         }
+        background:#ffd430;
+        padding:15px 0;
     }
 }
 
 a.search-icon, a.back-icon, a.list-icon, a.random-icon{
     font-size:300%;
-    color:#535252;
+    color:#000;
     display:block;
     position:absolute;
-    top:15px;
-    left:15%;
-    margin-left:-30px;
+    top:40px;
+    left:3%;
+    // margin-left:-30px;
     cursor:pointer;
-    opacity:0.6;
-
+    opacity:1;
+    transition:opacity 0.25s ease-in-out;
     &:hover{
         color:#000;
-        opacity:1;
+        opacity:0.6;
     }
 }
 
 a.list-icon, a.random-icon{
     left:initial;
-    right:15%;
-    margin-left:30px;
+    right:3%;
+    // margin-left:30px;
+}
+a.random-icon{
+ right:4%;
 }
 
+.constraint{
+    margin:0 auto;
+    max-width:980px;
+}
+
+.side-label{
+    color:#ffd430;
+    border-top:2px solid #ffd430;
+    transform: rotate(-90deg);
+    display:inline-block;
+    position:absolute;
+    left:-21px;
+    top:20%;
+    font-family: 'NHaasGroteskTXStd-75Bd', 'Open Sans', 'helvetica Neue', Helvetica, Arial;
+    // font-weight: bold;
+    padding-top:3px;
+    height:15px;
+    &.current{
+        top:210px;
+    }
+    &.next{
+        top:400px;
+        left:-26px;
+    }
+}
+
+.page.search .side-label.next{
+    left:-24px;
+}
+
+
+@font-face {
+  font-family: 'fontello';
+  src: url('./fonts/fontello.eot?57841820');
+  src: url('./fonts/fontello.eot?57841820#iefix') format('embedded-opentype'),
+       url('./fonts/fontello.woff?57841820') format('woff'),
+       url('./fonts/fontello.ttf?57841820') format('truetype'),
+       url('./fonts/fontello.svg?57841820#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('../font/fontello.svg?83248956#fontello') format('svg');
+  }
+}
+*/
+ 
+ [class^="fontello-"]:before, [class*=" fontello-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+     
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+ 
+.fontello-list:before { content: '\e800'; } /* '' */
+.fontello-search:before { content: '\e801'; } /* '' */
+.fontello-left-open:before { content: '\e802'; } /* '' */
+.fontello-cd:before { content: '\e803'; } /* '' */
+.fontello-shuffle:before { content: '\e804'; } /* '' */

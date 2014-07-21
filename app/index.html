@@ -11,6 +11,7 @@
         <meta name="description" content="JKBX - Un jukebox dont vous êtes le héros et nous les victimes.">
         <meta property="og:title" content="JKBX">
         <meta property="og:url" content="http://jkbx.ca/">
+        <meta property="og:image" content="http://jkbx.ca/images/share.png?v2">
         <meta property="og:site_name" content="JKBX">
         <meta property="og:description" content="JKBX - Un jukebox dont vous êtes le héros et nous les victimes.">
         <meta name="viewport" content="width=480">
@@ -31,10 +32,10 @@
 
         <div class="container">
             <div class="logo">
-                <img src="images/logo.png" />
+                <img src="images/logo.png?v2" />
             </div>
             <div class="page loading active">
-                <span class="glyphicon glyphicon-refresh loading"></span>
+                <img class="loading" src="images/vinyl.png" alt="Chargement" title="" />
                 <p class="loadjs hide">Chargement des dépendences externes</p>
                 <p class="connecting hide">Connexion au serveur</p>
                 <p class="fetching hide">Récupération des chansons</p>
@@ -50,36 +51,54 @@
 
             <div class="page playlist">
                 <a class="search-icon">
-                    <span class="glyphicon glyphicon-search"></span>
+                    <span class="fontello-search"></span>
                 </a>
 
                 <a class="list-icon">
-                    <span class="glyphicon glyphicon-list"></span>
+                    <span class="fontello-list"></span>
                 </a>
+                
+                <div class="side-label current">
+                    En cours
+                </div>
 
-                <ul class="list-group clearfix">
-                    
-                </ul>
+                <div class="side-label next">
+                    En attente
+                </div>
+                <div class="constraint">
+                
+                    <ul class="list-group clearfix">
+                        
+                    </ul>
+                </div>
             </div>
 
              <div class="page search">
                 <a class="back-icon">
-                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    <span class="fontello-left-open"></span>
                 </a>
                  <a class="random-icon">
-                    <span class="glyphicon glyphicon-random"></span>
+                    <span class="fontello-shuffle"></span>
                 </a>
-                <input type="text" class="search" placeholder="Recherche ta toune" autocomplete="off" />
+                <div class="side-label next">
+                    Résultats
+                </div>
+                <div class="constraint">
+
+                    <input type="text" class="search border-title" placeholder="Recherche" autocomplete="off" />
+                </div>
             </div>
 
             <div class="page list">
                 <a class="back-icon">
-                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    <span class="fontello-left-open"></span>
                 </a>
-                <h2>Liste des artistes</h2>
-                <ul>
+                <div class="constraint">
+                    <h2 class="border-title">Liste des artistes</h2>
+                    <ul>
 
-                </ul>
+                    </ul>
+                </div>
             </div>
 
            <!--  <div class="footer">

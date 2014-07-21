@@ -55,7 +55,8 @@ App =
 
 		$("input.search").typeahead 
 			minLength:2,
-			highlight:false
+			highlight:false,
+			hint:false,
 		,
 			source:(query,process)->
 				clearTimeout App._searchTimer
@@ -69,7 +70,7 @@ App =
 				empty:[
 					'<strong>Oops. Y\'a rien ici!</strong>'
 				].join("\n"),
-				suggestion:Handlebars.compile('<p class="result"><strong>{{title}}</strong><br /> {{artist}} <br/> <em>{{album}}</em></p>')
+				suggestion:Handlebars.compile('<span class="title">{{title}}</span><div class="info"><span class="artist">{{artist}}</span> — <span class="album">{{album}}</span></div>')
 
 		$('input.search').on 'typeahead:selected', (e, suggestion, dataset) ->
 			App.vote suggestion.id
@@ -153,7 +154,7 @@ App =
 			song = App.currentSong
 			html = App.getSongHtml(song);
 
-			$li = $('<li/>').html(html).attr('data-id', song.id).addClass('current')
+			$li = $('<li/>').html(html).attr('data-id', song.id).addClass('current border-title')
 			if App.config.user.canSkip? && App.config.user.canSkip
 				$a = $('<a />').html('<span class="glyphicon glyphicon-remove"></span>').addClass('skip');
 				$li.append($a);
@@ -169,6 +170,16 @@ App =
 				return false;
 
 		App.playlist = data;
+		top = -1000;
+		$li = $('.page.playlist li.current');
+
+		if $li? && $li.length > 0
+			top = $li.offset().top
+			top += $li.outerHeight();
+			top += 60;
+
+		$('.page.playlist .side-label.next').css 'top', top+'px'
+
 
 	login:(code)->
 		App.code = code
@@ -208,9 +219,9 @@ App =
 				cache = {}
 				for key of App.songs
 					_artist = App.songs[key].artist.join(' & ') + ''
-					if _artist? && _artist != '' && !cache[_artist]?
+					if _artist? && _artist != '' && !cache[_artist.toLowerCase()]?
 						_songs.push _artist
-						cache[_artist] = true
+						cache[_artist.toLowerCase()] = true
 
 				_songs.sort (a,b)->
 					if a.toUpperCase() < b.toUpperCase()
@@ -226,13 +237,18 @@ App =
 					$li = $('<li />').text(_songs[i]);
 					$li.on 'click', (e)->
 						App.gotoPage 'search'
-						$('.tt-input.search').focus().typeahead('val', $(this).text()).typeahead('open')
+						text = $(this).text();
+						setTimeout ->
+							$('.tt-input.search').focus().typeahead('val', text).typeahead('open')
+						, 1000
 					$ul.append($li)
-			$('.page.'+page).fadeIn 'fast', ->
-				if page == 'search'
-					$('.tt-input.search').focus();
-				if page == 'playlist'
-					App.setPlaylist()
+			setTimeout ->
+				$('.page.'+page).fadeIn 'fast', ->
+					if page == 'search'
+						$('.tt-input.search').focus();
+					if page == 'playlist'
+						App.setPlaylist()
+			, 600
 					# $search = $('input.search.tt-input');
 					# $search.focus()
 					# clearInterval App.demoInterval
