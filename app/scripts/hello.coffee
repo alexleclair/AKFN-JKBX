@@ -84,7 +84,7 @@ App =
 
 		App.socket.on 'config', (config)->
 			App.config.server = config
-			console.log 'Got config', config
+			# console.log 'Got config', config
 
 		App.socket.on 'playlist', (data)->
 			App.setPlaylist(data)
@@ -268,7 +268,7 @@ App =
 					# , 80
 
 	vote:(song, score=1)->
-		console.log 'Vote', song, score
+		# console.log 'Vote', song, score
 		App.socket.emit 'vote', {id:song, score:score}
 		ga('send','pageview', '/vote/'+score+'/'+encodeURIComponent(song))
 
@@ -350,7 +350,7 @@ $ ->
 	if false && ((window.location+'').indexOf('ngrok.com') >= 0 || (window.location+'').indexOf('jukebox.zloche.net') >= 0)
 		App.config.endpoint = 'http://dc3cd24.ngrok.com:80/';
 	else if (window.location+'').indexOf('/localhost:9000') >= 0
-		App.config.endpoint = 'http://localhost:8090/'
+		App.config.endpoint = 'http://jkbx.ca:80/'
 	App.init();
 	code = Cookie.read 'code'
 	if code? && code != ''
